@@ -6,4 +6,5 @@ import ua.hillel.springsec.model.entity.Customer;
 
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
+    Customer findByEmail(String email);
 }

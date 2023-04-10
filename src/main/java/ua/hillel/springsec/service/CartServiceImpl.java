@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ua.hillel.springsec.model.dto.CartDTO;
 import ua.hillel.springsec.model.dto.CartSizeDTO;
 import ua.hillel.springsec.model.dto.ProductDTO;
-import ua.hillel.springdata.model.entity.*;
 import ua.hillel.springsec.model.entity.*;
 import ua.hillel.springsec.model.mapper.CartMapper;
 import ua.hillel.springsec.repo.CartRepo;
