@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ua.hillel</groupId>
-    <artifactId>hillel-spring-data-jpa-repo-demo</artifactId>
+    <artifactId>hillel-spring-boot-security-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
