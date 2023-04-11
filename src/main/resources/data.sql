@@ -1,4 +1,4 @@
-INSERT INTO t_customer (name, email) VALUES ('test', 'test@test.com');
+INSERT INTO t_customer (name, email, password) VALUES ('test', 'test@test.com', '$2a$10$5ol5k3QEGZSE.1pam2hGo.3Ul9l7qDPcT5OEEo68eQPCEhVgkUpAm');
 
 INSERT INTO t_category (name)
 VALUES ('smartphones'),

@@ -17,6 +17,7 @@ public class Customer {
     private String name;
     @Column(nullable = false)
     private String email;
+    private String password;
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart carts;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

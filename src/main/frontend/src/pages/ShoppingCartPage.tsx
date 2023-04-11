@@ -6,11 +6,14 @@ import { Cart } from '../model/Cart'
 const ShoppingCartPage = () => {
     const [cart, setCart] = useState<Cart>()
 
+    const jwt = localStorage.getItem('token')
+
     const getCart = () => {
         fetch('http://localhost:8080/api/cart', {
             method: 'GET',
             headers: {
-                'userId': '1'
+                'userId': '1',
+                'Authorization': `Bearer ${jwt}`
             }
         }).then(resp => {
             if (resp.ok) {

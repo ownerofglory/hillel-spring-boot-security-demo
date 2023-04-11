@@ -5,13 +5,15 @@ import { Badge, Container, Nav, Navbar } from 'react-bootstrap'
 
 const NavBar = () => {
     const [cartSize, setCartSize] = useState(0)
-    const isSigned = true
+    const jwt = localStorage.getItem('token')
+    const isSigned = !!jwt
 
     const getCartSize = () => {
         fetch('http://localhost:8080/api/cart/size', {
             method: 'GET',
             headers: {
-                'userId': '1'
+                'userId': '1',
+                'Authorization': `Bearer ${jwt}`
             }
         }).then(resp => {
             if (resp.ok) {

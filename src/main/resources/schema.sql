@@ -7,6 +7,7 @@ PRIMARY KEY (id)
 CREATE TABLE t_customer (
   id bigint NOT NULL AUTO_INCREMENT,
   email varchar(255) NOT NULL,
+  password varchar(255) NOT NULL,
   name varchar(255) DEFAULT NULL,
 PRIMARY KEY (id)
 );

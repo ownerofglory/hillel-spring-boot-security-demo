@@ -24,7 +24,11 @@ Sample app for demonstrating Spring Boot
 ## Build
 
 ### To build the whole project incl. Spring Boot and Frontend:
-
+ - Install node packages
+  ```
+  cd src/main/frontend
+  npm install
+```
 - Run maven build
 ```bash
     mvn clean package
@@ -45,10 +49,6 @@ Build is now available in `src/main/build` directory
 
 ## Run
 ```bash
-    env \
-    MYSQL_URL=jdbc:mysql://host.com:3306/db_name \ 
-    MYSQL_USER=db_user \
-    MYSQL_PASSWORD=db_password \
     mvn spring-boot:run
 ```
 App is now running at [http://localhost:8080](http://localhost:8080)

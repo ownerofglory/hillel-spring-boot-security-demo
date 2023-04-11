@@ -2,10 +2,13 @@ package ua.hillel.springsec.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ua.hillel.springsec.model.dto.CartDTO;
 import ua.hillel.springsec.model.dto.CartSizeDTO;
 import ua.hillel.springsec.model.dto.ProductDTO;
+import ua.hillel.springsec.security.AuthInfoHolder;
 import ua.hillel.springsec.service.CartService;
 
 @RestController
@@ -16,7 +19,8 @@ public class CartController {
 
     @GetMapping("/size")
     public @ResponseBody
-    ResponseEntity<CartSizeDTO> getCartSize(@RequestHeader("userId") Long userId) {
+    ResponseEntity<CartSizeDTO> getCartSize(Long userId) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CartSizeDTO cartSizeDTO = cartService.countCartItemsByCustomerId(userId);
 
         return ResponseEntity.ok(cartSizeDTO);

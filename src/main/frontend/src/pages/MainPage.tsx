@@ -13,6 +13,8 @@ const MainPage = () => {
     const [categories, setCategories] = useState<Category[]>()
     const [products, setProducts] = useState<Product[]>()
 
+    const jwt = localStorage.getItem('token')
+
     useEffect(() => {
         getCategories().then(cat => setCategories(cat))
         getProducts(0, 9).then(prods => setProducts(prods))
@@ -22,7 +24,12 @@ const MainPage = () => {
     
 
     const getCategories = () => {
-        return fetch('http://localhost:8080/api/category').then(resp => {
+        return fetch('http://localhost:8080/api/category', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        }).then(resp => {
             if (resp.ok) {
                 return resp.json()
             }
@@ -30,7 +37,12 @@ const MainPage = () => {
     }
 
     const getProducts = (num: number | 0, count: number | 50, categoryId?: number) => {
-        return fetch(`http://localhost:8080/api/products?num=${num}&count=${count}&categoryId=${categoryId ?? ''}`)
+        return fetch(`http://localhost:8080/api/products?num=${num}&count=${count}&categoryId=${categoryId ?? ''}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        })
             .then(resp => {
                 if (resp.ok) {
                     return resp.json()
@@ -48,7 +60,8 @@ const MainPage = () => {
             body: JSON.stringify(product),
             headers: {
                 'userId': '1',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`
             }
         }).then(resp => {
             if (resp.ok) {}

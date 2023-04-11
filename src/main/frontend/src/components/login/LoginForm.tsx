@@ -8,15 +8,21 @@ const LoginForm = () => {
    const navigate = useNavigate()
 
     const login = () => {
-        fetch(`http://localhost:8080/api/login`, {
+        fetch(`http://localhost:8080/api/auth/login`, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(loginData)
         }).then(resp => {
-            if (resp.ok) {
-                navigate('/')
-            } else {
+            if (!resp.ok) {
                 navigate('/error')
+                return
             }
+            return resp.json()
+        }).then(data => {
+            localStorage.setItem('token', data.token)
+            navigate('/')
         })
     }
 
