@@ -1,10 +1,33 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Badge, Container, Nav, Navbar } from 'react-bootstrap'
 
 const NavBar = () => {
+    const [cartSize, setCartSize] = useState(0)
     const isSigned = true
+
+    const getCartSize = () => {
+        fetch('http://localhost:8080/api/cart/size', {
+            method: 'GET',
+            headers: {
+                'userId': '1'
+            }
+        }).then(resp => {
+            if (resp.ok) {
+                return resp.json()
+            }
+        }).then(data => setCartSize(data.size))
+    }
+
+    useEffect(() => {
+        getCartSize()
+    
+      return () => {
+        
+      }
+    }, [cartSize])
+    
 
   return (
     <Navbar bg='dark' variant='dark' expand='lg'>
@@ -25,7 +48,13 @@ const NavBar = () => {
                     <Nav>
                         <Nav.Link href='/cart'>
                             <FontAwesomeIcon icon={ faCartShopping } style={{marginRight: 10}} />
-                            <Badge bg='primary'>9</Badge>
+                            {
+                                cartSize > 0 ? (
+                                    <Badge bg='primary'>{cartSize}</Badge>
+                                ): (
+                                    <span></span>
+                                )
+                            } 
                         </Nav.Link>
                         <Navbar.Text>
                             Signed in as: <a href='#'>Test User</a>

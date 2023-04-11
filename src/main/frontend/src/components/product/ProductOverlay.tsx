@@ -5,9 +5,10 @@ import ProductCard from './ProductCard'
 
 interface ProductOverlayProps {
     products: Product[]
+    onAddToCart: (product: Product) => void
 }
 
-const ProductOverlay: React.FC<ProductOverlayProps> = ({products}) => {
+const ProductOverlay: React.FC<ProductOverlayProps> = ({products, onAddToCart}) => {
 
     const chunkProductArray = (arr: Product[], size: number) => {
         return arr.reduce((chunks: Product[][], item: Product, idx: number) => {
@@ -32,7 +33,7 @@ const ProductOverlay: React.FC<ProductOverlayProps> = ({products}) => {
                     {
                         productRow.map(product => (
                             <Col key={product.id} lg={4}>
-                                <ProductCard product={product}></ProductCard>
+                                <ProductCard onAddToCart={onAddToCart} product={product}></ProductCard>
                             </Col>
                         ))
                     }

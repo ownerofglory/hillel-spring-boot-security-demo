@@ -1,7 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Container, Table } from 'react-bootstrap'
+import { Cart } from '../../model/Cart'
+import { totalmem } from 'os'
 
-const CartOverlay = () => {
+interface CartOverlayProps {
+    cart: Cart
+}
+
+const CartOverlay: React.FC<CartOverlayProps> = ({cart}) => {
+    const [total, setTotal] = useState(0)
+
+    const calculateTotal = () => {
+        return cart?.cartItems?.reduce((acc: number, cur) => acc + cur.product.price, 0)
+    }
+
+    useEffect(() => {
+        
+        setTotal(calculateTotal())
+    
+      return () => {
+        
+      }
+    }, [cart])
+    
   return (
     <Container style={{marginTop: '20px'}}>
          <Table striped bordered hover>
@@ -16,19 +37,23 @@ const CartOverlay = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>iPhone9</td>
-                    <td><img height={'48px'} src={'https://i.dummyjson.com/data/products/1/4.jpg'}/></td>
-                    <td>1</td>
-                    <td>150$</td>
-                    <td>
-                        <Button variant="danger">Remove</Button>
-                    </td>
-                </tr>
+                {
+                    cart.cartItems?.map((item, idx) => (
+                        <tr>
+                            <td>{idx}</td>
+                            <td>{item.product.title}</td>
+                            <td><img height={'48px'} src={item.product.imageUrl}/></td>
+                            <td>{item.quantity}</td>
+                            <td>{item.product.price} $</td>
+                            <td>
+                                <Button variant="danger">Remove</Button>
+                            </td>
+                        </tr>
+                    ))
+                }
             </tbody>
         </Table>
-        <p>Total amount: 340$</p>
+        <p>Total amount: {total} $</p>
         <Button variant="primary">Complete order</Button>
     </Container>
   )

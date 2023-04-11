@@ -14,24 +14,24 @@ import ua.hillel.springsec.service.CartService;
 public class CartController {
     private final CartService cartService;
 
-    @GetMapping("/{userId}/size")
+    @GetMapping("/size")
     public @ResponseBody
-    ResponseEntity<CartSizeDTO> getCartSize(@PathVariable("userId") Long userId) {
+    ResponseEntity<CartSizeDTO> getCartSize(@RequestHeader("userId") Long userId) {
         CartSizeDTO cartSizeDTO = cartService.countCartItemsByCustomerId(userId);
 
         return ResponseEntity.ok(cartSizeDTO);
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping
     public @ResponseBody
-    ResponseEntity<CartDTO> addToCart(@PathVariable("userId") Long userId, @RequestBody ProductDTO productDTO) {
+    ResponseEntity<CartDTO> addToCart(@RequestHeader("userId") Long userId, @RequestBody ProductDTO productDTO) {
         CartDTO cartDTO = cartService.addProductToCartByCustomerId(userId, productDTO);
         return ResponseEntity.ok(cartDTO);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping
     public @ResponseBody
-    ResponseEntity<CartDTO> getCart(@PathVariable("userId") Long userId) {
+    ResponseEntity<CartDTO> getCart(@RequestHeader("userId") Long userId) {
         CartDTO cartByCustomerId = cartService.getCartByCustomerId(userId);
         return ResponseEntity.ok(cartByCustomerId);
     }

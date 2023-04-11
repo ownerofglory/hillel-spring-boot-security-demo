@@ -6,9 +6,11 @@ import { Product } from '../../model/Product'
 
 interface ProductProps {
     product: Product
+    onAddToCart: (product: Product) => void
 }
 
-const ProductCard: React.FC<ProductProps> = ({ product }) => {
+const ProductCard: React.FC<ProductProps> = ({ product, onAddToCart }) => {
+
   return (
     <Card style={{ width: '18rem' }}>
         <Card.Img variant='top' src={product.imageUrl} />
@@ -20,7 +22,9 @@ const ProductCard: React.FC<ProductProps> = ({ product }) => {
             <Card.Text>
                 <p>{product.price} $</p>
             </Card.Text>
-            <Button variant={product.quantity === 0 ? 'secondary' : 'success'} disabled={product.quantity === 0}>
+            <Button variant={product.quantity === 0 ? 'secondary' : 'success'} 
+                    disabled={product.quantity === 0}
+                    onClick={() => onAddToCart(product)}>
                 <span>Add to cart</span>
                 <FontAwesomeIcon icon={ faCartShopping } style={{marginRight: 10}} />
             </Button>

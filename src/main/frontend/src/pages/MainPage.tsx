@@ -17,9 +17,7 @@ const MainPage = () => {
         getCategories().then(cat => setCategories(cat))
         getProducts(0, 9).then(prods => setProducts(prods))
     
-      return () => {
-        
-      }
+      return () => {}
     }, [])
     
 
@@ -44,6 +42,19 @@ const MainPage = () => {
         getProducts(0, 9, category.id).then(prods => setProducts(prods))
     }
 
+    const onAddToCart = (product: Product) => {
+        fetch('http://localhost:8080/api/cart', {
+            method: 'POST',
+            body: JSON.stringify(product),
+            headers: {
+                'userId': '1',
+                'Content-Type': 'application/json'
+            }
+        }).then(resp => {
+            if (resp.ok) {}
+        })
+    }
+
   return (
     <div>
         <NavBar></NavBar>
@@ -53,7 +64,7 @@ const MainPage = () => {
                     <CategorySidebar onActiveCategory={onActiveCategoryChange} categories={categories ?? []}></CategorySidebar>
                 </Col>
                 <Col md={9}>
-                    <ProductOverlay products={products ?? []}></ProductOverlay>
+                    <ProductOverlay onAddToCart={onAddToCart} products={products ?? []}></ProductOverlay>
                     <br></br>
                     <ProductPagination></ProductPagination>
                 </Col>
