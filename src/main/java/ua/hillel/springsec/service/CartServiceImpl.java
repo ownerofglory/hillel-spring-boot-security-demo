@@ -1,7 +1,10 @@
 package ua.hillel.springsec.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ua.hillel.springsec.exception.UserNotAuthorizedException;
 import ua.hillel.springsec.model.dto.CartDTO;
 import ua.hillel.springsec.model.dto.CartSizeDTO;
 import ua.hillel.springsec.model.dto.ProductDTO;
@@ -10,6 +13,8 @@ import ua.hillel.springsec.model.mapper.CartMapper;
 import ua.hillel.springsec.repo.CartRepo;
 import ua.hillel.springsec.repo.CustomerRepo;
 import ua.hillel.springsec.repo.ProductRepo;
+import ua.hillel.springsec.security.CustomerUserDetails;
+import ua.hillel.springsec.security.PermissionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +28,15 @@ public class CartServiceImpl implements CartService {
     private final CustomerRepo customerRepo;
     private final ProductRepo productRepo;
     private final CartMapper cartMapper;
+    private final PermissionUtil permissionUtil;
 
     @Override
-    public CartDTO addProductToCartByCustomerId(Long customerId, ProductDTO productDTO) {
+    public CartDTO addProductToCartByCustomerId(Long customerId, ProductDTO productDTO) throws UserNotAuthorizedException {
         Customer customerById = customerRepo.findById(customerId).orElse(null);
+
+        if (!permissionUtil.isUserAuthorized(customerId)) {
+            throw new UserNotAuthorizedException();
+        }
 
         // find cart for customer
         Cart cartByCustomer = cartRepo.findByCustomerId(customerId);

@@ -5,10 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import ua.hillel.springsec.exception.UserNotAuthorizedException;
 import ua.hillel.springsec.model.dto.CartDTO;
 import ua.hillel.springsec.model.dto.CartSizeDTO;
 import ua.hillel.springsec.model.dto.ProductDTO;
-import ua.hillel.springsec.security.AuthInfoHolder;
 import ua.hillel.springsec.service.CartService;
 
 @RestController
@@ -17,25 +17,25 @@ import ua.hillel.springsec.service.CartService;
 public class CartController {
     private final CartService cartService;
 
-    @GetMapping("/size")
+    @GetMapping("/{userId}/size")
     public @ResponseBody
-    ResponseEntity<CartSizeDTO> getCartSize(Long userId) {
+    ResponseEntity<CartSizeDTO> getCartSize(@PathVariable("userId") Long userId) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CartSizeDTO cartSizeDTO = cartService.countCartItemsByCustomerId(userId);
 
         return ResponseEntity.ok(cartSizeDTO);
     }
 
-    @PostMapping
+    @PostMapping("/{userId}")
     public @ResponseBody
-    ResponseEntity<CartDTO> addToCart(@RequestHeader("userId") Long userId, @RequestBody ProductDTO productDTO) {
+    ResponseEntity<CartDTO> addToCart(@PathVariable("userId") Long userId, @RequestBody ProductDTO productDTO) throws UserNotAuthorizedException {
         CartDTO cartDTO = cartService.addProductToCartByCustomerId(userId, productDTO);
         return ResponseEntity.ok(cartDTO);
     }
 
-    @GetMapping
+    @GetMapping("/{userId}")
     public @ResponseBody
-    ResponseEntity<CartDTO> getCart(@RequestHeader("userId") Long userId) {
+    ResponseEntity<CartDTO> getCart(@PathVariable("userId") Long userId) {
         CartDTO cartByCustomerId = cartService.getCartByCustomerId(userId);
         return ResponseEntity.ok(cartByCustomerId);
     }

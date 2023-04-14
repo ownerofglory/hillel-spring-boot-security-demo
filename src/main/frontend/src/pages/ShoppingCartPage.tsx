@@ -2,28 +2,22 @@ import React, { useEffect, useState } from 'react'
 import NavBar from '../components/navbar/NavBar'
 import CartOverlay from '../components/cart/CartOverlay'
 import { Cart } from '../model/Cart'
+import { PageProps } from '../model/props/PageProps'
+import shoppingCartService from '../service/shoppingCartService'
 
-const ShoppingCartPage = () => {
+const ShoppingCartPage: React.FC<PageProps> = ({auth}) => {
     const [cart, setCart] = useState<Cart>()
 
-    const jwt = localStorage.getItem('token')
+    const getCart = (userId: number) => {
+        if (!auth) {
+            return
+        }
 
-    const getCart = () => {
-        fetch('http://localhost:8080/api/cart', {
-            method: 'GET',
-            headers: {
-                'userId': '1',
-                'Authorization': `Bearer ${jwt}`
-            }
-        }).then(resp => {
-            if (resp.ok) {
-                return resp.json()
-            }
-        }).then(data => setCart(data))
+        shoppingCartService.getCart(auth.userId, auth.token).then(data => setCart(data))
     }
 
     useEffect(() => {
-      getCart()
+      getCart(auth?.userId!)
     
       return () => {
         
@@ -35,7 +29,7 @@ const ShoppingCartPage = () => {
 
   return (
     <div>
-        <NavBar></NavBar>
+        <NavBar auth={auth}></NavBar>
         <CartOverlay cart={cart ?? {} as Cart}></CartOverlay>
     </div>
   )

@@ -1,4 +1,6 @@
-INSERT INTO t_customer (name, email, password) VALUES ('test', 'test@test.com', '$2a$10$5ol5k3QEGZSE.1pam2hGo.3Ul9l7qDPcT5OEEo68eQPCEhVgkUpAm');
+INSERT INTO t_customer (name, email, password) VALUES
+('Test User', 'test@test.com', '$2a$10$5ol5k3QEGZSE.1pam2hGo.3Ul9l7qDPcT5OEEo68eQPCEhVgkUpAm'),
+('John Doe', 'john.doe@mail.com', '$2a$10$FcICryLab4f4JykPNRh.EuT1z3CkVdOJ1J5UlJizhSFKoYMFwI.6G');
 
 INSERT INTO t_category (name)
 VALUES ('smartphones'),

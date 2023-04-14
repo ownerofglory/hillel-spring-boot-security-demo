@@ -2,26 +2,22 @@ import React, { ChangeEvent, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { LoginModel } from '../../model/LoginModel'
 import { useNavigate } from 'react-router-dom'
+import { AuthModel } from '../../model/AuthModel'
+import authService from '../../service/authService'
 
-const LoginForm = () => {
+interface LoginFormProps {
+    onLogin: (auth: AuthModel) => void
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({onLogin}) => {
     const [loginData, setLoginData] = useState<LoginModel>()
    const navigate = useNavigate()
 
     const login = () => {
-        fetch(`http://localhost:8080/api/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(loginData)
-        }).then(resp => {
-            if (!resp.ok) {
-                navigate('/error')
-                return
-            }
-            return resp.json()
-        }).then(data => {
-            localStorage.setItem('token', data.token)
+        authService.login(loginData!).then(data => {
+            const auth = data as AuthModel
+            onLogin(auth)
+            localStorage.setItem('token', auth.token)
             navigate('/')
         })
     }

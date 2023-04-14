@@ -3,8 +3,8 @@ package ua.hillel.springsec.model.dto;
 import lombok.Data;
 
 @Data
-public class AuthDTO {
-    private String token;
+public class RegisterDTO {
+    private String email;
+    private String password;
     private String name;
-    private Long userId;
 }

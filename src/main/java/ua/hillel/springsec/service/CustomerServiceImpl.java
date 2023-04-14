@@ -3,6 +3,7 @@ package ua.hillel.springsec.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.hillel.springsec.model.dto.CustomerDTO;
+import ua.hillel.springsec.model.dto.RegisterDTO;
 import ua.hillel.springsec.model.entity.Customer;
 import ua.hillel.springsec.model.mapper.CustomerMapper;
 import ua.hillel.springsec.repo.CustomerRepo;
@@ -34,4 +35,5 @@ public class CustomerServiceImpl implements CustomerService {
         Customer byEmail = customerRepo.findByEmail(email);
         return customerMapper.customerToCustomerDTO(byEmail);
     }
+
 }

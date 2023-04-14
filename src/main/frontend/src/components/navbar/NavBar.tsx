@@ -2,24 +2,21 @@ import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { Badge, Container, Nav, Navbar } from 'react-bootstrap'
+import { AuthModel } from '../../model/AuthModel'
+import shoppingCartService from '../../service/shoppingCartService'
 
-const NavBar = () => {
+interface NavBarProps {
+    auth?: AuthModel
+}
+
+const NavBar: React.FC<NavBarProps> = ({auth}) => {
     const [cartSize, setCartSize] = useState(0)
-    const jwt = localStorage.getItem('token')
-    const isSigned = !!jwt
+
 
     const getCartSize = () => {
-        fetch('http://localhost:8080/api/cart/size', {
-            method: 'GET',
-            headers: {
-                'userId': '1',
-                'Authorization': `Bearer ${jwt}`
-            }
-        }).then(resp => {
-            if (resp.ok) {
-                return resp.json()
-            }
-        }).then(data => setCartSize(data.size))
+        if (auth) {
+            shoppingCartService.getCartSize(auth.userId, auth.token).then(data => setCartSize(data.size))
+        }  
     }
 
     useEffect(() => {
@@ -40,13 +37,13 @@ const NavBar = () => {
                 <Nav className='me-auto'>
                     <Nav.Link href='/'>Main</Nav.Link>
                     {
-                        isSigned ? (
+                        auth ? (
                             <Nav.Link href='/orders'>Orders</Nav.Link>
                         ): (<span></span>)
                     }
                     
                 </Nav>
-                { isSigned ? (
+                { auth ? (
                     <Nav>
                         <Nav.Link href='/cart'>
                             <FontAwesomeIcon icon={ faCartShopping } style={{marginRight: 10}} />
@@ -59,7 +56,7 @@ const NavBar = () => {
                             } 
                         </Nav.Link>
                         <Navbar.Text>
-                            Signed in as: <a href='#'>Test User</a>
+                            Signed in as: <a href='#'>{auth.name}</a>
                         </Navbar.Text>
                         <Nav.Link href='/logout'>Logout</Nav.Link>
                     </Nav>

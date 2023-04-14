@@ -2,21 +2,22 @@ import React, { ChangeEvent, useState } from 'react'
 import { Container, Button, Form } from 'react-bootstrap'
 import { RegisterModel } from '../../model/RegisterModel'
 import { useNavigate } from 'react-router-dom'
+import { AuthModel } from '../../model/AuthModel'
+import authService from '../../service/authService'
 
-const RegisterForm = () => {
+interface RegisterFormProps {
+    onRegister: (auth: AuthModel) => void
+}
+
+const RegisterForm: React.FC<RegisterFormProps> = ({onRegister}) => {
     const [registerData, setRegisterData] = useState<RegisterModel>()
     const navigate = useNavigate()
 
     const register = () => {
-        fetch('http://localhost:8080/api/register', {
-            method: 'POST',
-            body: JSON.stringify(registerData)
-        }).then(resp => {
-            if (resp.ok) {
-                navigate('/login')
-            } else {
-                navigate('/error')
-            }
+        authService.register(registerData!).then(data => {
+            const auth = data as AuthModel
+            onRegister(auth)
+            navigate('/')
         })
     }
 

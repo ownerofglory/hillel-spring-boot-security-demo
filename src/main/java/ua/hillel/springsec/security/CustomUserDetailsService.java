@@ -14,7 +14,6 @@ import ua.hillel.springsec.repo.CustomerRepo;
 
 import java.util.List;
 
-//@Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final CustomerRepo customerRepo;
@@ -23,6 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Customer byEmail = customerRepo.findByEmail(username);
-        return new User(byEmail.getEmail(), byEmail.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        return new CustomerUserDetails(byEmail.getId(), byEmail.getEmail(), byEmail.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }

@@ -1,6 +1,7 @@
 package ua.hillel.springsec.service;
 
 import ua.hillel.springsec.model.dto.CustomerDTO;
+import ua.hillel.springsec.model.dto.RegisterDTO;
 
 public interface CustomerService {
     CustomerDTO createCustomer(CustomerDTO customerDTO);

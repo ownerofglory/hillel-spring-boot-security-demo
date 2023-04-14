@@ -8,69 +8,39 @@ import CategorySidebar from '../components/category/CategorySidebar'
 import ProductPagination from '../components/pagination/ProductPagination'
 import { Category } from '../model/Category'
 import { Product } from '../model/Product'
+import { PageProps } from '../model/props/PageProps'
+import productService from '../service/productService'
+import { useNavigate } from 'react-router-dom'
+import shoppingCartService from '../service/shoppingCartService'
 
-const MainPage = () => {
+const MainPage: React.FC<PageProps> = ({auth}) => {
     const [categories, setCategories] = useState<Category[]>()
     const [products, setProducts] = useState<Product[]>()
-
-    const jwt = localStorage.getItem('token')
+    const navigate = useNavigate()
 
     useEffect(() => {
-        getCategories().then(cat => setCategories(cat))
-        getProducts(0, 9).then(prods => setProducts(prods))
+        const jwt = auth?.token ?? ''
+        productService.getCategories(jwt).then(cat => setCategories(cat))
+        productService.getProducts(jwt, 0, 9).then(prods => setProducts(prods))
     
       return () => {}
     }, [])
     
 
-    const getCategories = () => {
-        return fetch('http://localhost:8080/api/category', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${jwt}`
-            }
-        }).then(resp => {
-            if (resp.ok) {
-                return resp.json()
-            }
-        })
-    }
-
-    const getProducts = (num: number | 0, count: number | 50, categoryId?: number) => {
-        return fetch(`http://localhost:8080/api/products?num=${num}&count=${count}&categoryId=${categoryId ?? ''}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${jwt}`
-            }
-        })
-            .then(resp => {
-                if (resp.ok) {
-                    return resp.json()
-                }
-        })
-    }
-
     const onActiveCategoryChange = (category: Category) => {
-        getProducts(0, 9, category.id).then(prods => setProducts(prods))
+        productService.getProducts(auth?.token!, 0, 9, category.id).then(prods => setProducts(prods))
     }
 
     const onAddToCart = (product: Product) => {
-        fetch('http://localhost:8080/api/cart', {
-            method: 'POST',
-            body: JSON.stringify(product),
-            headers: {
-                'userId': '1',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${jwt}`
-            }
-        }).then(resp => {
-            if (resp.ok) {}
-        })
+        if (!auth) {
+            navigate('/login')
+        }
+        shoppingCartService.addToCart(auth?.userId!, product, auth?.token!)
     }
 
   return (
     <div>
-        <NavBar></NavBar>
+        <NavBar auth={auth}></NavBar>
         <Container>
             <Row>
                 <Col md={3}>
